@@ -50,7 +50,7 @@ export function StepContact({ data, update, onNext, onBack }: Props) {
             type="tel"
             value={data.customerPhone}
             onChange={(e) => update({ customerPhone: e.target.value })}
-            placeholder="(310) 555-1234"
+            placeholder="(213) 761-4379"
             className="mt-2 w-full rounded-lg border border-navy/15 bg-cream/50 px-4 py-3 text-navy focus:border-gold focus:outline-none focus:ring-1 focus:ring-gold"
           />
         </div>

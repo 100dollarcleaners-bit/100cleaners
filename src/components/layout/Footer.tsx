@@ -2,11 +2,11 @@ import { Instagram, Mail, Phone } from "lucide-react";
 import Link from "next/link";
 
 export function Footer() {
-  const phone = process.env.NEXT_PUBLIC_BUSINESS_PHONE ?? "(310) 555-0100";
+  const phone = process.env.NEXT_PUBLIC_BUSINESS_PHONE ?? "(213) 761-4379";
   const email =
-    process.env.NEXT_PUBLIC_BUSINESS_EMAIL ?? "hello@100cleaners.com";
+    process.env.NEXT_PUBLIC_BUSINESS_EMAIL ?? "100dollarcleaners@gmail.com";
   const instagram =
-    process.env.NEXT_PUBLIC_INSTAGRAM_URL ?? "https://instagram.com";
+    process.env.NEXT_PUBLIC_INSTAGRAM_URL ?? "https://instagram.com/100cleaners";
 
   return (
     <footer id="contact" className="bg-navy-dark text-white">

@@ -48,8 +48,9 @@ function buildBookingSummary(booking: BookingRecord) {
 
 export async function sendBookingConfirmationEmails(booking: BookingRecord) {
   const resend = getResend();
-  const from = process.env.RESEND_FROM_EMAIL ?? "bookings@100cleaners.com";
-  const ownerEmail = process.env.BUSINESS_OWNER_EMAIL;
+  const from = process.env.RESEND_FROM_EMAIL ?? "bookings@100cleaner.com";
+  const ownerEmail =
+    process.env.BUSINESS_OWNER_EMAIL ?? "100dollarcleaners@gmail.com";
 
   const html = buildBookingSummary(booking);
 
