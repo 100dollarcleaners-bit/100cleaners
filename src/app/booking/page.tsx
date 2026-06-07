@@ -1,5 +1,6 @@
 import { Suspense } from "react";
 import Link from "next/link";
+import { BookingHero } from "@/components/booking/BookingHero";
 import { BookingWizard } from "@/components/booking/BookingWizard";
 
 export const metadata = {
@@ -32,16 +33,9 @@ export default function BookingPage() {
         </div>
       </header>
 
-      <main className="mx-auto max-w-7xl px-6 py-12 lg:px-8 lg:py-16">
-        <div className="mb-10 text-center">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-gold">
-            Reserve Your Clean
-          </p>
-          <h1 className="mt-2 font-display text-3xl text-navy sm:text-4xl">
-            Book your appointment
-          </h1>
-        </div>
+      <BookingHero />
 
+      <main className="mx-auto max-w-7xl px-6 py-12 lg:px-8 lg:py-16">
         <Suspense fallback={<BookingFallback />}>
           <BookingWizard />
         </Suspense>

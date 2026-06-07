@@ -2,7 +2,12 @@
 
 import { Check, Shirt } from "lucide-react";
 import { Button } from "@/components/ui/Button";
-import { BASE_PRICE, LAUNDRY_ADDON_PRICE } from "@/lib/constants";
+import {
+  getBookingTotal,
+  LAUNDRY_ADDON_PRICE,
+  SERVICE_OPTIONS,
+  type ServiceType,
+} from "@/lib/constants";
 import type { BookingFormData } from "@/lib/types";
 
 interface Props {
@@ -12,35 +17,45 @@ interface Props {
 }
 
 export function StepService({ data, update, onNext }: Props) {
-  const total = BASE_PRICE + (data.laundryAddon ? LAUNDRY_ADDON_PRICE : 0);
+  const total = getBookingTotal(data.serviceType, data.laundryAddon);
 
   return (
     <div>
       <h2 className="font-display text-2xl text-navy">Select your service</h2>
       <p className="mt-2 text-sm text-navy/60">
-        Standard Clean includes everything you need for a spotless home.
+        Choose Standard or Deep Clean, then add laundry if you like.
       </p>
 
-      <button
-        type="button"
-        onClick={() => update({ laundryAddon: false })}
-        className={`mt-8 w-full rounded-xl border-2 p-6 text-left transition-all ${
-          !data.laundryAddon
-            ? "border-gold bg-gold/5"
-            : "border-navy/10 hover:border-navy/20"
-        }`}
-      >
-        <div className="flex items-start justify-between">
-          <div>
-            <p className="font-display text-xl text-navy">Standard Clean</p>
-            <p className="mt-1 text-sm text-navy/60">Up to 3 bedrooms</p>
-          </div>
-          <p className="font-display text-2xl text-navy">${BASE_PRICE}</p>
-        </div>
-        <p className="mt-3 text-xs text-navy/50">
-          Deep clean, steam, dusting, mopping, vacuuming, trash, dishes, cabinets
-        </p>
-      </button>
+      <div className="mt-8 space-y-4">
+        {SERVICE_OPTIONS.map((service) => {
+          const selected = data.serviceType === service.id;
+          return (
+            <button
+              key={service.id}
+              type="button"
+              onClick={() => update({ serviceType: service.id as ServiceType })}
+              className={`w-full rounded-xl border-2 p-6 text-left transition-all ${
+                selected
+                  ? "border-gold bg-gold/5"
+                  : "border-navy/10 hover:border-navy/20"
+              }`}
+            >
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <p className="font-display text-xl text-navy">
+                    {service.name}
+                  </p>
+                  <p className="mt-1 text-sm text-navy/60">{service.tagline}</p>
+                </div>
+                <p className="font-display text-2xl text-navy shrink-0">
+                  ${service.price}
+                </p>
+              </div>
+              <p className="mt-3 text-xs text-navy/50">{service.description}</p>
+            </button>
+          );
+        })}
+      </div>
 
       <button
         type="button"

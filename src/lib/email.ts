@@ -1,9 +1,10 @@
 import { Resend } from "resend";
 import {
-  BASE_PRICE,
-  LAUNDRY_ADDON_PRICE,
-  TIME_SLOTS,
-} from "./constants";
+  formatDate,
+  formatTimeLabel,
+  getBookingServiceLabel,
+  getBookingServiceTotal,
+} from "./booking-utils";
 import type { BookingRecord } from "./types";
 
 function getResend() {
@@ -12,28 +13,15 @@ function getResend() {
   return new Resend(key);
 }
 
-function formatTimeLabel(time: string) {
-  return TIME_SLOTS.find((s) => s.value === time)?.label ?? time;
-}
-
-function formatDate(date: string) {
-  return new Date(date + "T12:00:00").toLocaleDateString("en-US", {
-    weekday: "long",
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
-}
-
 function buildBookingSummary(booking: BookingRecord) {
-  const serviceTotal =
-    BASE_PRICE + (booking.laundry_addon ? LAUNDRY_ADDON_PRICE : 0);
+  const serviceTotal = getBookingServiceTotal(booking);
+  const serviceLabel = getBookingServiceLabel(booking);
 
   return `
     <h2 style="color:#0f1729;font-family:Georgia,serif;">Booking Confirmed</h2>
     <p>Thank you, ${booking.customer_name}. Your deposit has been received and your clean is confirmed.</p>
     <table style="width:100%;border-collapse:collapse;margin:24px 0;">
-      <tr><td style="padding:8px 0;color:#666;">Service</td><td style="padding:8px 0;">Standard Clean${booking.laundry_addon ? " + Laundry" : ""}</td></tr>
+      <tr><td style="padding:8px 0;color:#666;">Service</td><td style="padding:8px 0;">${serviceLabel}</td></tr>
       <tr><td style="padding:8px 0;color:#666;">Total (due at service)</td><td style="padding:8px 0;font-weight:600;">$${serviceTotal}</td></tr>
       <tr><td style="padding:8px 0;color:#666;">Date</td><td style="padding:8px 0;">${formatDate(booking.booking_date)}</td></tr>
       <tr><td style="padding:8px 0;color:#666;">Time</td><td style="padding:8px 0;">${formatTimeLabel(booking.booking_time)}</td></tr>

@@ -17,7 +17,7 @@ const playfair = Playfair_Display({
 export const metadata: Metadata = {
   title: "100 Cleaners | Premium Home Cleaning in Los Angeles",
   description:
-    "Luxury home cleaning for LA homeowners. Standard cleans from $100. Book online with a $25 deposit.",
+    "Luxury home cleaning for LA homeowners. Standard cleans from $150. Book online with a $25 deposit.",
   openGraph: {
     title: "100 Cleaners",
     description: "Premium home cleaning in Los Angeles",

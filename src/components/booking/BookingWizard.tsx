@@ -19,6 +19,7 @@ const STEPS = [
 ];
 
 const initialData: BookingFormData = {
+  serviceType: "standard",
   laundryAddon: false,
   address: "",
   bedroomCount: 1,

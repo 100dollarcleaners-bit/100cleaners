@@ -2,7 +2,8 @@ import Link from "next/link";
 import { CheckCircle } from "lucide-react";
 import { getStripe } from "@/lib/stripe";
 import { getBookingById } from "@/lib/supabase";
-import { TIME_SLOTS, BASE_PRICE, LAUNDRY_ADDON_PRICE } from "@/lib/constants";
+import { getBookingServiceTotal } from "@/lib/booking-utils";
+import { TIME_SLOTS } from "@/lib/constants";
 
 interface Props {
   searchParams: { session_id?: string };
@@ -31,8 +32,7 @@ export default async function BookingSuccessPage({ searchParams }: Props) {
           const timeLabel =
             TIME_SLOTS.find((s) => s.value === booking.booking_time)?.label ??
             booking.booking_time;
-          const total =
-            BASE_PRICE + (booking.laundry_addon ? LAUNDRY_ADDON_PRICE : 0);
+          const total = getBookingServiceTotal(booking);
 
           summary = {
             name: booking.customer_name,

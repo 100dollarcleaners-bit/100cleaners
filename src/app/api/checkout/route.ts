@@ -9,6 +9,8 @@ import {
 import type { BookingFormData } from "@/lib/types";
 
 function validateBody(body: BookingFormData): string | null {
+  if (!body.serviceType || !["standard", "deep"].includes(body.serviceType))
+    return "Please select a service";
   if (!body.address?.trim()) return "Address is required";
   if (body.bedroomCount < 1 || body.bedroomCount > 3)
     return "Bedroom count must be 1–3";
@@ -48,6 +50,7 @@ export async function POST(request: NextRequest) {
       bedroom_count: body.bedroomCount,
       special_instructions: body.specialInstructions?.trim() || null,
       laundry_addon: body.laundryAddon,
+      service_type: body.serviceType,
       booking_date: body.bookingDate,
       booking_time: body.bookingTime,
     });

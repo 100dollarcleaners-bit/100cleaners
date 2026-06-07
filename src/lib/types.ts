@@ -1,4 +1,5 @@
 export interface BookingFormData {
+  serviceType: "standard" | "deep";
   laundryAddon: boolean;
   address: string;
   bedroomCount: number;

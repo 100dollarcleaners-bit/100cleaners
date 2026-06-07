@@ -3,9 +3,9 @@
 import { CreditCard, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import {
-  BASE_PRICE,
   DEPOSIT_AMOUNT,
-  LAUNDRY_ADDON_PRICE,
+  getBookingTotal,
+  getServiceLabel,
   TIME_SLOTS,
 } from "@/lib/constants";
 import type { BookingFormData } from "@/lib/types";
@@ -18,8 +18,8 @@ interface Props {
 }
 
 export function StepPayment({ data, onBack, onPay, loading }: Props) {
-  const total =
-    BASE_PRICE + (data.laundryAddon ? LAUNDRY_ADDON_PRICE : 0);
+  const total = getBookingTotal(data.serviceType, data.laundryAddon);
+  const serviceLabel = getServiceLabel(data.serviceType, data.laundryAddon);
   const timeLabel =
     TIME_SLOTS.find((s) => s.value === data.bookingTime)?.label ??
     data.bookingTime;
@@ -43,9 +43,7 @@ export function StepPayment({ data, onBack, onPay, loading }: Props) {
       <div className="mt-8 space-y-3 rounded-xl bg-cream p-6 text-sm">
         <div className="flex justify-between">
           <span className="text-navy/60">Service</span>
-          <span className="font-medium text-navy">
-            Standard Clean{data.laundryAddon ? " + Laundry" : ""}
-          </span>
+          <span className="font-medium text-navy">{serviceLabel}</span>
         </div>
         <div className="flex justify-between">
           <span className="text-navy/60">Service total</span>
