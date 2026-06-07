@@ -1,18 +1,16 @@
 import { createClient } from "@supabase/supabase-js";
 import { PENDING_HOLD_MINUTES } from "./constants";
+import { getSupabaseConfig } from "./supabase-config";
 import type { BookingRecord } from "./types";
 
 function getSupabaseAdmin() {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const key =
-    process.env.SUPABASE_SERVICE_ROLE_KEY ??
-    process.env.SUPABASE_SECRET_KEY;
+  const config = getSupabaseConfig();
 
-  if (!url || !key) {
+  if (!config) {
     throw new Error("Missing Supabase environment variables");
   }
 
-  return createClient(url, key);
+  return createClient(config.url, config.key);
 }
 
 export async function getBookedSlotsForDate(date: string): Promise<string[]> {
