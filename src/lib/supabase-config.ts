@@ -17,6 +17,15 @@ export function normalizeSupabaseUrl(raw: string): string {
   return url;
 }
 
+export function isValidSupabaseUrl(url: string): boolean {
+  try {
+    const parsed = new URL(url);
+    return parsed.hostname.endsWith(".supabase.co");
+  } catch {
+    return false;
+  }
+}
+
 export function getSupabaseConfig() {
   const rawUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const key =
@@ -27,8 +36,16 @@ export function getSupabaseConfig() {
     return null;
   }
 
+  const url = normalizeSupabaseUrl(rawUrl);
+
+  if (!isValidSupabaseUrl(url)) {
+    throw new Error(
+      `Invalid NEXT_PUBLIC_SUPABASE_URL: "${rawUrl}". Use your Supabase project URL, e.g. https://YOUR-PROJECT-ID.supabase.co — not your website domain.`
+    );
+  }
+
   return {
-    url: normalizeSupabaseUrl(rawUrl),
+    url,
     key: key.trim(),
   };
 }

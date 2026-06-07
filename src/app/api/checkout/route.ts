@@ -9,6 +9,22 @@ import {
 } from "@/lib/supabase";
 import type { BookingFormData } from "@/lib/types";
 
+function checkoutErrorMessage(error: unknown): string {
+  if (error instanceof Error) {
+    if (error.message.includes("Missing STRIPE_SECRET_KEY")) {
+      return "Payment is not configured yet. Please contact us to complete your booking.";
+    }
+    if (error.message.includes("Invalid NEXT_PUBLIC_SUPABASE_URL")) {
+      return "Booking system is temporarily unavailable. Please call us to complete your deposit.";
+    }
+    if (error.message.includes("Missing Supabase")) {
+      return "Booking system is temporarily unavailable. Please call us to complete your deposit.";
+    }
+  }
+
+  return "Unable to start checkout. Please try again or call us to book.";
+}
+
 function validateBody(body: BookingFormData): string | null {
   if (!body.serviceType || !["standard", "deep"].includes(body.serviceType))
     return "Please select a service";
@@ -77,7 +93,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error("Checkout error:", error);
     return NextResponse.json(
-      { error: "Unable to start checkout. Please try again." },
+      { error: checkoutErrorMessage(error) },
       { status: 500 }
     );
   }
