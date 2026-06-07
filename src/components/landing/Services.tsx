@@ -36,7 +36,7 @@ export function Services() {
             variants={fadeInUp}
             className="overflow-hidden rounded-2xl border border-navy/10 bg-white shadow-card"
           >
-            <div className="relative aspect-[16/10] w-full">
+            <div className="relative aspect-[4/3] w-full">
               <OptimizedImage
                 src={siteImages.standardClean.src}
                 alt={siteImages.standardClean.alt}
@@ -73,7 +73,7 @@ export function Services() {
             variants={fadeInUp}
             className="overflow-hidden rounded-2xl border border-gold/30 bg-navy shadow-premium"
           >
-            <div className="relative aspect-[16/10] w-full">
+            <div className="relative aspect-[4/3] w-full">
               <OptimizedImage
                 src={siteImages.deepClean.src}
                 alt={siteImages.deepClean.alt}
@@ -112,7 +112,7 @@ export function Services() {
             variants={fadeInUp}
             className="overflow-hidden rounded-2xl border border-navy/10 bg-cream shadow-card lg:col-span-1"
           >
-            <div className="relative aspect-[16/10] w-full">
+            <div className="relative aspect-[4/3] w-full">
               <OptimizedImage
                 src={siteImages.laundry.src}
                 alt={siteImages.laundry.alt}

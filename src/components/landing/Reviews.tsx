@@ -69,7 +69,7 @@ export function Reviews() {
               variants={fadeInUp}
               className="overflow-hidden rounded-2xl border border-navy/10 bg-white shadow-card"
             >
-              <div className="relative aspect-[16/10] w-full">
+              <div className="relative aspect-[4/3] w-full">
                 <OptimizedImage
                   src={reviewImages[index].src}
                   alt={reviewImages[index].alt}
