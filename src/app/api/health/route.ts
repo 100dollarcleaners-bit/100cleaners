@@ -45,7 +45,10 @@ export async function GET() {
   }
 
   const supabase = createClient(config.url, config.key);
-  const { error } = await supabase.from("bookings").select("id").limit(1);
+  const { error } = await supabase
+    .from("bookings")
+    .select("id, service_type, laundry_addon")
+    .limit(1);
 
   const urlLooksWrong = normalizedUrl ? !isValidSupabaseUrl(normalizedUrl) : false;
 
@@ -60,7 +63,10 @@ export async function GET() {
         ? "Use exactly: https://YOUR-PROJECT-ID.supabase.co (not your website URL)"
         : error?.code === "PGRST205"
           ? "Run supabase/schema.sql — bookings table missing"
-          : error?.code === "PGRST125"
+          : error?.code === "PGRST204" ||
+              error?.message?.includes("column")
+            ? "Run supabase/migrations/add_service_columns.sql in Supabase SQL editor"
+            : error?.code === "PGRST125"
             ? "Fix NEXT_PUBLIC_SUPABASE_URL in Vercel — see hint above"
             : null,
     supabase: error

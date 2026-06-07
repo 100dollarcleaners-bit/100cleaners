@@ -10,19 +10,46 @@ import {
 import type { BookingFormData } from "@/lib/types";
 
 function checkoutErrorMessage(error: unknown): string {
-  if (error instanceof Error) {
-    if (error.message.includes("Missing STRIPE_SECRET_KEY")) {
+  if (error && typeof error === "object") {
+    const err = error as { message?: string; code?: string; type?: string };
+
+    if (err.message?.includes("Missing STRIPE_SECRET_KEY")) {
       return "Payment is not configured yet. Please contact us to complete your booking.";
     }
-    if (error.message.includes("Invalid NEXT_PUBLIC_SUPABASE_URL")) {
+    if (err.message?.includes("Invalid NEXT_PUBLIC_SUPABASE_URL")) {
       return "Booking system is temporarily unavailable. Please call us to complete your deposit.";
     }
-    if (error.message.includes("Missing Supabase")) {
+    if (err.message?.includes("Missing Supabase")) {
       return "Booking system is temporarily unavailable. Please call us to complete your deposit.";
+    }
+
+    // Supabase / PostgREST
+    if (err.code && err.message) {
+      if (
+        err.code === "PGRST204" ||
+        err.message.includes("column") ||
+        err.message.includes("Could not find")
+      ) {
+        return "Our booking database needs a quick update. Please call (213) 761-4379 to complete your deposit.";
+      }
+      console.error("Supabase checkout error:", err.code, err.message);
+    }
+
+    // Stripe
+    if (err.type?.startsWith("Stripe")) {
+      console.error("Stripe checkout error:", err.type, err.message);
+      if (err.message?.includes("api_key")) {
+        return "Payment is not configured correctly. Please call (213) 761-4379 to book.";
+      }
+      return "Could not start payment. Please try again or call (213) 761-4379.";
+    }
+
+    if (err.message) {
+      console.error("Checkout error:", err.message);
     }
   }
 
-  return "Unable to start checkout. Please try again or call us to book.";
+  return "Unable to start checkout. Please try again or call (213) 761-4379.";
 }
 
 function validateBody(body: BookingFormData): string | null {
