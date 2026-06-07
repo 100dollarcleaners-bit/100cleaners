@@ -38,6 +38,12 @@ function checkoutErrorMessage(error: unknown): string {
     // Stripe
     if (err.type?.startsWith("Stripe")) {
       console.error("Stripe checkout error:", err.type, err.message);
+      if (
+        err.type === "StripeAuthenticationError" ||
+        err.message?.includes("Invalid API Key")
+      ) {
+        return "Payment is not set up correctly on our end. Please call (213) 761-4379 to complete your deposit.";
+      }
       if (err.message?.includes("api_key")) {
         return "Payment is not configured correctly. Please call (213) 761-4379 to book.";
       }
