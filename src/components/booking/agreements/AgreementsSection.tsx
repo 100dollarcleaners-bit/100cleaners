@@ -1,6 +1,5 @@
 "use client";
 
-import { Button } from "@/components/ui/Button";
 import { AgreementPanel } from "@/components/booking/agreements/AgreementPanel";
 import {
   allAgreementsAccepted,
@@ -15,17 +14,9 @@ interface Props {
   data: BookingFormData;
   agreements: AgreementAcceptance;
   updateAgreements: (partial: Partial<AgreementAcceptance>) => void;
-  onNext: () => void;
-  onBack: () => void;
 }
 
-export function StepAgreements({
-  data,
-  agreements,
-  updateAgreements,
-  onNext,
-  onBack,
-}: Props) {
+export function AgreementsSection({ data, agreements, updateAgreements }: Props) {
   const [viewed, setViewed] = useState<Record<AgreementId, boolean>>({
     serviceAgreement: false,
     liabilityWaiver: false,
@@ -38,13 +29,13 @@ export function StepAgreements({
 
   return (
     <div>
-      <h2 className="font-display text-2xl text-navy">Review & agree</h2>
-      <p className="mt-2 text-sm text-navy/60">
-        Open each document, read the terms, and check the box to sign electronically
-        before paying your deposit.
+      <h3 className="font-display text-lg text-navy">Review & sign agreements</h3>
+      <p className="mt-1 text-sm text-navy/60">
+        Open each document below, read the terms, and check the box to sign
+        electronically before paying your deposit.
       </p>
 
-      <div className="mt-8 space-y-4">
+      <div className="mt-5 space-y-4">
         {REQUIRED_AGREEMENTS.map((agreement) => (
           <AgreementPanel
             key={agreement.id}
@@ -64,19 +55,12 @@ export function StepAgreements({
         ))}
       </div>
 
-      <p className="mt-6 text-xs text-navy/50">
+      <p className="mt-4 text-xs text-navy/50">
         {viewedCount} of {REQUIRED_AGREEMENTS.length} documents opened
-        {!allAccepted && " · All checkboxes required to continue"}
+        {!allAccepted && " · All checkboxes required to pay deposit"}
       </p>
-
-      <div className="mt-8 flex justify-between">
-        <Button type="button" variant="ghost" onClick={onBack}>
-          Back
-        </Button>
-        <Button type="button" onClick={onNext} disabled={!allAccepted}>
-          Continue to Payment
-        </Button>
-      </div>
     </div>
   );
 }
+
+export { allAgreementsAccepted };

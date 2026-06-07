@@ -56,7 +56,7 @@ export function AgreementPanel({
       </button>
 
       {open && (
-        <div className="max-h-64 overflow-y-auto border-t border-navy/10 bg-white px-4 py-4">
+        <div className="max-h-72 overflow-y-auto border-t border-navy/10 bg-white px-4 py-4">
           <Content data={data} />
         </div>
       )}

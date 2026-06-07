@@ -5,8 +5,8 @@ import { useSearchParams } from "next/navigation";
 import { useCallback, useState } from "react";
 import { emptyAgreements } from "@/lib/agreements";
 import type { AgreementAcceptance } from "@/lib/agreements";
+import { allAgreementsAccepted } from "@/lib/agreements";
 import type { BookingFormData } from "@/lib/types";
-import { StepAgreements } from "./steps/StepAgreements";
 import { StepContact } from "./steps/StepContact";
 import { StepDateTime } from "./steps/StepDateTime";
 import { StepDetails } from "./steps/StepDetails";
@@ -18,7 +18,6 @@ const STEPS = [
   "Details",
   "Date & Time",
   "Contact",
-  "Agree",
   "Deposit",
 ];
 
@@ -64,6 +63,13 @@ export function BookingWizard() {
   const back = () => setStep((s) => Math.max(s - 1, 0));
 
   const handleCheckout = async () => {
+    if (!allAgreementsAccepted(data.agreements)) {
+      setError(
+        "Please open each agreement above and check all boxes before paying your deposit."
+      );
+      return;
+    }
+
     setLoading(true);
     setError(null);
     try {
@@ -87,7 +93,7 @@ export function BookingWizard() {
 
   return (
     <div className="mx-auto max-w-2xl">
-      {cancelled && step < 5 && (
+      {cancelled && step < 4 && (
         <div className="mb-6 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
           Your payment was cancelled. Complete your booking below.
         </div>
@@ -153,17 +159,10 @@ export function BookingWizard() {
             <StepContact data={data} update={update} onNext={next} onBack={back} />
           )}
           {step === 4 && (
-            <StepAgreements
+            <StepPayment
               data={data}
               agreements={data.agreements}
               updateAgreements={updateAgreements}
-              onNext={next}
-              onBack={back}
-            />
-          )}
-          {step === 5 && (
-            <StepPayment
-              data={data}
               onBack={back}
               onPay={handleCheckout}
               loading={loading}

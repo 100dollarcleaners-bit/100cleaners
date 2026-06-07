@@ -74,7 +74,7 @@ export function StepContact({ data, update, onNext, onBack }: Props) {
           Back
         </Button>
         <Button type="button" onClick={onNext} disabled={!valid}>
-          Continue to Payment
+          Continue
         </Button>
       </div>
     </div>
