@@ -2,9 +2,11 @@ import { Suspense } from "react";
 import Link from "next/link";
 import { BookingHero } from "@/components/booking/BookingHero";
 import { BookingWizard } from "@/components/booking/BookingWizard";
+import { BrandLogo } from "@/components/ui/BrandLogo";
+import { BRAND_NAME } from "@/lib/constants";
 
 export const metadata = {
-  title: "Book a Clean | 100 Cleaners",
+  title: `Book a Clean | ${BRAND_NAME}`,
   description: "Schedule your premium home cleaning in Los Angeles.",
 };
 
@@ -22,7 +24,7 @@ export default function BookingPage() {
       <header className="border-b border-navy/10 bg-white">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5 lg:px-8">
           <Link href="/" className="font-display text-xl text-navy">
-            100<span className="text-gold">Cleaners</span>
+            <BrandLogo />
           </Link>
           <Link
             href="/"

@@ -5,6 +5,7 @@ import {
   getBookingServiceLabel,
   getBookingServiceTotal,
 } from "./booking-utils";
+import { BRAND_NAME } from "./constants";
 import type { BookingRecord } from "./types";
 
 function getResend() {
@@ -43,15 +44,15 @@ export async function sendBookingConfirmationEmails(booking: BookingRecord) {
   const html = buildBookingSummary(booking);
 
   await resend.emails.send({
-    from: `100 Cleaners <${from}>`,
+    from: `${BRAND_NAME} <${from}>`,
     to: booking.customer_email,
-    subject: "Your cleaning is confirmed — 100 Cleaners",
+    subject: `Your cleaning is confirmed — ${BRAND_NAME}`,
     html,
   });
 
   if (ownerEmail) {
     await resend.emails.send({
-      from: `100 Cleaners Bookings <${from}>`,
+      from: `${BRAND_NAME} Bookings <${from}>`,
       to: ownerEmail,
       subject: `New booking: ${booking.customer_name} — ${formatDate(booking.booking_date)}`,
       html: `

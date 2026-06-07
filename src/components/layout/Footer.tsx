@@ -1,5 +1,7 @@
 import { Instagram, Mail, Phone } from "lucide-react";
 import Link from "next/link";
+import { BrandLogo } from "@/components/ui/BrandLogo";
+import { BRAND_NAME } from "@/lib/constants";
 
 export function Footer() {
   const phone = process.env.NEXT_PUBLIC_BUSINESS_PHONE ?? "(213) 761-4379";
@@ -14,7 +16,7 @@ export function Footer() {
         <div className="grid gap-12 md:grid-cols-3">
           <div>
             <p className="font-display text-2xl font-medium">
-              100<span className="text-gold">Cleaners</span>
+              <BrandLogo />
             </p>
             <p className="mt-4 text-sm leading-relaxed text-white/60">
               Premium home cleaning for Los Angeles homeowners. Spotless
@@ -64,11 +66,6 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/forms" className="hover:text-gold">
-                  Client Forms
-                </Link>
-              </li>
-              <li>
                 <a href="#services" className="hover:text-gold">
                   Services
                 </a>
@@ -83,7 +80,7 @@ export function Footer() {
         </div>
 
         <div className="mt-12 border-t border-white/10 pt-8 text-center text-xs text-white/40">
-          © {new Date().getFullYear()} 100 Cleaners. Los Angeles, CA. All rights
+          © {new Date().getFullYear()} {BRAND_NAME}. Los Angeles, CA. All rights
           reserved.
         </div>
       </div>

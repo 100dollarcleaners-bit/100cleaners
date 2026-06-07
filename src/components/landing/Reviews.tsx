@@ -41,7 +41,7 @@ const reviews = [
   {
     name: "Robert & Ana G.",
     location: "Manhattan Beach",
-    text: "We use 100 Cleaners monthly. Consistent quality every single visit — highly recommend.",
+    text: "We use 100% Cleaner monthly. Consistent quality every single visit — highly recommend.",
     rating: 5,
   },
 ];

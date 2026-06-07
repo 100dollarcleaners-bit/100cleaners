@@ -1,4 +1,3 @@
-import { ClientForms } from "@/components/landing/ClientForms";
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
 import { Gallery } from "@/components/landing/Gallery";
@@ -21,7 +20,6 @@ export default function HomePage() {
         <VisualBanner />
         <Trust />
         <Reviews />
-        <ClientForms />
       </main>
       <Footer />
     </>

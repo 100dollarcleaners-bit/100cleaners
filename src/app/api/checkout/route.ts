@@ -1,3 +1,4 @@
+import { allAgreementsAccepted } from "@/lib/agreements";
 import { NextRequest, NextResponse } from "next/server";
 import { TIME_SLOTS } from "@/lib/constants";
 import { createDepositCheckoutSession } from "@/lib/stripe";
@@ -22,6 +23,8 @@ function validateBody(body: BookingFormData): string | null {
   if (!body.customerEmail?.includes("@")) return "Valid email is required";
   if (body.customerPhone.replace(/\D/g, "").length < 10)
     return "Valid phone is required";
+  if (!body.agreements || !allAgreementsAccepted(body.agreements))
+    return "You must read and accept all agreements to continue";
   return null;
 }
 

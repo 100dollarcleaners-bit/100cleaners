@@ -1,3 +1,5 @@
+import type { AgreementAcceptance } from "@/lib/agreements";
+
 export interface BookingFormData {
   serviceType: "standard" | "deep";
   laundryAddon: boolean;
@@ -9,6 +11,7 @@ export interface BookingFormData {
   customerName: string;
   customerPhone: string;
   customerEmail: string;
+  agreements: AgreementAcceptance;
 }
 
 export interface BookingRecord {

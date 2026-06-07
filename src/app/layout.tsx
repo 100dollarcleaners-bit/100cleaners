@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
+import { BRAND_NAME } from "@/lib/constants";
 import "./globals.css";
 
 const inter = Inter({
@@ -15,11 +16,11 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: "100 Cleaners | Premium Home Cleaning in Los Angeles",
+  title: `${BRAND_NAME} | Premium Home Cleaning in Los Angeles`,
   description:
     "Luxury home cleaning for LA homeowners. Standard cleans from $150. Book online with a $25 deposit.",
   openGraph: {
-    title: "100 Cleaners",
+    title: BRAND_NAME,
     description: "Premium home cleaning in Los Angeles",
     type: "website",
   },

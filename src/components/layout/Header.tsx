@@ -5,11 +5,11 @@ import Link from "next/link";
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/Button";
+import { BrandLogo } from "@/components/ui/BrandLogo";
 
 const navLinks = [
   { href: "#services", label: "Services" },
   { href: "#gallery", label: "Gallery" },
-  { href: "#forms", label: "Forms" },
   { href: "#how-it-works", label: "How It Works" },
   { href: "#reviews", label: "Reviews" },
   { href: "#contact", label: "Contact" },
@@ -27,7 +27,7 @@ export function Header() {
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 lg:px-8">
         <Link href="/" className="font-display text-xl font-medium text-white">
-          100<span className="text-gold">Cleaners</span>
+          <BrandLogo />
         </Link>
 
         <nav className="hidden items-center gap-8 md:flex">

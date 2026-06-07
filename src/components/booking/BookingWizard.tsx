@@ -3,7 +3,10 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useSearchParams } from "next/navigation";
 import { useCallback, useState } from "react";
+import { emptyAgreements } from "@/lib/agreements";
+import type { AgreementAcceptance } from "@/lib/agreements";
 import type { BookingFormData } from "@/lib/types";
+import { StepAgreements } from "./steps/StepAgreements";
 import { StepContact } from "./steps/StepContact";
 import { StepDateTime } from "./steps/StepDateTime";
 import { StepDetails } from "./steps/StepDetails";
@@ -11,11 +14,12 @@ import { StepPayment } from "./steps/StepPayment";
 import { StepService } from "./steps/StepService";
 
 const STEPS = [
-  "Select Service",
-  "Home Details",
+  "Service",
+  "Details",
   "Date & Time",
-  "Contact Info",
-  "Pay Deposit",
+  "Contact",
+  "Agree",
+  "Deposit",
 ];
 
 const initialData: BookingFormData = {
@@ -29,6 +33,7 @@ const initialData: BookingFormData = {
   customerName: "",
   customerPhone: "",
   customerEmail: "",
+  agreements: emptyAgreements(),
 };
 
 export function BookingWizard() {
@@ -44,6 +49,14 @@ export function BookingWizard() {
 
   const update = useCallback((partial: Partial<BookingFormData>) => {
     setData((prev) => ({ ...prev, ...partial }));
+    setError(null);
+  }, []);
+
+  const updateAgreements = useCallback((partial: Partial<AgreementAcceptance>) => {
+    setData((prev) => ({
+      ...prev,
+      agreements: { ...prev.agreements, ...partial },
+    }));
     setError(null);
   }, []);
 
@@ -74,18 +87,18 @@ export function BookingWizard() {
 
   return (
     <div className="mx-auto max-w-2xl">
-      {cancelled && step < 4 && (
+      {cancelled && step < 5 && (
         <div className="mb-6 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
           Your payment was cancelled. Complete your booking below.
         </div>
       )}
 
       <div className="mb-10">
-        <div className="flex items-center justify-between gap-2">
+        <div className="flex items-center justify-between gap-1 sm:gap-2">
           {STEPS.map((label, i) => (
             <div key={label} className="flex flex-1 flex-col items-center">
               <div
-                className={`flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold transition-colors ${
+                className={`flex h-7 w-7 items-center justify-center rounded-full text-[10px] font-bold sm:h-8 sm:w-8 sm:text-xs transition-colors ${
                   i <= step
                     ? "bg-gold text-navy"
                     : "bg-navy/10 text-navy/40"
@@ -93,7 +106,7 @@ export function BookingWizard() {
               >
                 {i + 1}
               </div>
-              <span className="mt-2 hidden text-center text-[10px] font-medium uppercase tracking-wide text-navy/50 sm:block">
+              <span className="mt-1.5 hidden text-center text-[9px] font-medium uppercase tracking-wide text-navy/50 sm:block">
                 {label}
               </span>
             </div>
@@ -140,6 +153,15 @@ export function BookingWizard() {
             <StepContact data={data} update={update} onNext={next} onBack={back} />
           )}
           {step === 4 && (
+            <StepAgreements
+              data={data}
+              agreements={data.agreements}
+              updateAgreements={updateAgreements}
+              onNext={next}
+              onBack={back}
+            />
+          )}
+          {step === 5 && (
             <StepPayment
               data={data}
               onBack={back}

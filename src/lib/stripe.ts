@@ -1,5 +1,5 @@
 import Stripe from "stripe";
-import { DEPOSIT_AMOUNT } from "./constants";
+import { BRAND_NAME, DEPOSIT_AMOUNT } from "./constants";
 
 let stripeInstance: Stripe | null = null;
 
@@ -30,7 +30,7 @@ export async function createDepositCheckoutSession(params: {
           product_data: {
             name: "Cleaning Service Deposit",
             description:
-              "$25 deposit to confirm your 100 Cleaners appointment",
+              `$25 deposit to confirm your ${BRAND_NAME} appointment`,
           },
           unit_amount: DEPOSIT_AMOUNT * 100,
         },

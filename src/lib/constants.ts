@@ -3,6 +3,8 @@ export const DEEP_CLEAN_PRICE = 300;
 export const LAUNDRY_ADDON_PRICE = 50;
 export const DEPOSIT_AMOUNT = 25;
 
+export const BRAND_NAME = "100% Cleaner";
+
 /** @deprecated Use STANDARD_PRICE */
 export const BASE_PRICE = STANDARD_PRICE;
 
