@@ -67,3 +67,46 @@ export async function sendBookingConfirmationEmails(booking: BookingRecord) {
     });
   }
 }
+
+export async function sendAcademyEnrollmentEmails(params: {
+  customerName: string;
+  customerEmail: string;
+}) {
+  const resend = getResend();
+  const from = process.env.RESEND_FROM_EMAIL ?? "bookings@100cleaner.com";
+  const ownerEmail =
+    process.env.BUSINESS_OWNER_EMAIL ?? "100dollarcleaners@gmail.com";
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://www.100cleaner.com";
+
+  const customerHtml = `
+    <h2 style="color:#0f1729;font-family:Georgia,serif;">Welcome to The Cleaning CEO Blueprint!</h2>
+    <p>Hi ${params.customerName},</p>
+    <p>Thank you for enrolling. Your payment has been received and you now have lifetime access to the full course.</p>
+    <p style="margin:24px 0;">
+      <strong>What's next:</strong> You'll receive login details and course access instructions within 24 hours. 
+      In the meantime, save this email as your receipt.
+    </p>
+    <p style="color:#666;font-size:14px;">Questions? Reply to this email or visit ${appUrl}/academy</p>
+  `;
+
+  await resend.emails.send({
+    from: `${BRAND_NAME} Academy <${from}>`,
+    to: params.customerEmail,
+    subject: "You're enrolled — The Cleaning CEO Blueprint",
+    html: customerHtml,
+  });
+
+  if (ownerEmail) {
+    await resend.emails.send({
+      from: `${BRAND_NAME} Academy <${from}>`,
+      to: ownerEmail,
+      subject: `New academy enrollment: ${params.customerName}`,
+      html: `
+        <h2>New Course Enrollment</h2>
+        <p><strong>Name:</strong> ${params.customerName}<br/>
+        <strong>Email:</strong> ${params.customerEmail}</p>
+        <p>Send course access instructions to this student.</p>
+      `,
+    });
+  }
+}

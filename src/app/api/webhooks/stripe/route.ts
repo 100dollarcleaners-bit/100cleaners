@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
-import { sendBookingConfirmationEmails } from "@/lib/email";
+import {
+  sendAcademyEnrollmentEmails,
+  sendBookingConfirmationEmails,
+} from "@/lib/email";
 import { getStripe } from "@/lib/stripe";
 import { confirmBookingDeposit } from "@/lib/supabase";
 
@@ -33,19 +36,37 @@ export async function POST(request: NextRequest) {
 
     if (session.payment_status === "paid" && session.id) {
       try {
-        const booking = await confirmBookingDeposit(session.id);
+        if (session.metadata?.product === "academy") {
+          const customerEmail =
+            session.customer_email ?? session.customer_details?.email;
+          const customerName =
+            session.metadata.customer_name ?? "Student";
 
-        if (booking) {
-          try {
-            await sendBookingConfirmationEmails(booking);
-          } catch (emailErr) {
-            console.error("Email send failed:", emailErr);
+          if (customerEmail) {
+            try {
+              await sendAcademyEnrollmentEmails({
+                customerName,
+                customerEmail,
+              });
+            } catch (emailErr) {
+              console.error("Academy email send failed:", emailErr);
+            }
+          }
+        } else {
+          const booking = await confirmBookingDeposit(session.id);
+
+          if (booking) {
+            try {
+              await sendBookingConfirmationEmails(booking);
+            } catch (emailErr) {
+              console.error("Email send failed:", emailErr);
+            }
           }
         }
       } catch (dbErr) {
-        console.error("Booking confirmation failed:", dbErr);
+        console.error("Webhook processing failed:", dbErr);
         return NextResponse.json(
-          { error: "Database update failed" },
+          { error: "Processing failed" },
           { status: 500 }
         );
       }

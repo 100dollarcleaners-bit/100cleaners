@@ -21,6 +21,12 @@ const config: Config = {
           dark: "#a88b4a",
         },
         cream: "#f8f6f2",
+        academy: {
+          blue: "#1e6fd9",
+          "blue-dark": "#1558b0",
+          green: "#7cb518",
+          "green-dark": "#5a8f0f",
+        },
       },
       fontFamily: {
         display: ["var(--font-playfair)", "Georgia", "serif"],
