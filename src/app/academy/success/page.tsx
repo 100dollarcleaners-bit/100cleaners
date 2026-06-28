@@ -3,14 +3,13 @@ import { CheckCircle } from "lucide-react";
 import { getStripe } from "@/lib/stripe";
 import { ACADEMY_COURSE_NAME } from "@/lib/academy";
 import { BRAND_NAME } from "@/lib/constants";
+import { academySuccessMetadata } from "@/lib/site-metadata";
+
+export const metadata = academySuccessMetadata;
 
 interface Props {
   searchParams: { session_id?: string };
 }
-
-export const metadata = {
-  title: `Enrollment Confirmed | ${BRAND_NAME} Academy`,
-};
 
 export default async function AcademySuccessPage({ searchParams }: Props) {
   const sessionId = searchParams.session_id;

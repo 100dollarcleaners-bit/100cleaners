@@ -3,12 +3,10 @@ import Link from "next/link";
 import { BookingHero } from "@/components/booking/BookingHero";
 import { BookingWizard } from "@/components/booking/BookingWizard";
 import { BrandLogo } from "@/components/ui/BrandLogo";
+import { bookingMetadata } from "@/lib/site-metadata";
 import { BRAND_NAME } from "@/lib/constants";
 
-export const metadata = {
-  title: `Book a Clean | ${BRAND_NAME}`,
-  description: "Schedule your premium home cleaning in Los Angeles.",
-};
+export const metadata = bookingMetadata;
 
 function BookingFallback() {
   return (

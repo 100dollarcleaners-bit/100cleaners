@@ -22,13 +22,10 @@ import {
   academyProfitExample,
 } from "@/lib/academy";
 import { totalDownloadCount } from "@/lib/academy-downloads";
+import { academyMetadata } from "@/lib/site-metadata";
 import { BRAND_NAME } from "@/lib/constants";
 
-export const metadata = {
-  title: `${ACADEMY_COURSE_NAME} | ${BRAND_NAME}`,
-  description:
-    "Start or scale a cleaning business using the exact systems to build a company that runs without you. Launch special $249.",
-};
+export const metadata = academyMetadata;
 
 const benefitIcons = [BarChart3, Users, ClipboardList, TrendingUp];
 
@@ -55,6 +52,12 @@ export default function AcademyPage() {
               className="hidden text-sm text-navy/60 transition-colors hover:text-gold sm:block"
             >
               Home
+            </Link>
+            <Link
+              href="/academy/resources"
+              className="text-sm font-medium text-academy-blue transition-colors hover:text-academy-blue-dark"
+            >
+              Preview Materials
             </Link>
             <Button href="#enroll" variant="primary" className="!px-6 !py-2.5 !text-xs">
               Enroll — ${ACADEMY_LAUNCH_PRICE}

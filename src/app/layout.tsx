@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
-import { BRAND_NAME } from "@/lib/constants";
+import {
+  DEFAULT_DESCRIPTION,
+  SITE_NAME,
+  SITE_URL,
+} from "@/lib/site-metadata";
 import "./globals.css";
 
 const inter = Inter({
@@ -16,13 +20,20 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: `${BRAND_NAME} | Premium Home Cleaning in Los Angeles`,
-  description:
-    "Luxury home cleaning for LA homeowners. Standard cleans from $150. Book online with a $25 deposit.",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: "LA Cleaners | Premium Home Cleaning in Los Angeles",
+    template: `%s | ${SITE_NAME}`,
+  },
+  description: DEFAULT_DESCRIPTION,
+  applicationName: SITE_NAME,
   openGraph: {
-    title: BRAND_NAME,
-    description: "Premium home cleaning in Los Angeles",
+    siteName: SITE_NAME,
+    locale: "en_US",
     type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
   },
 };
 

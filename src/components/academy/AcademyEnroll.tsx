@@ -1,6 +1,7 @@
 "use client";
 
 import { Loader2 } from "lucide-react";
+import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { Button } from "@/components/ui/Button";
@@ -10,6 +11,7 @@ import {
   ACADEMY_REGULAR_PRICE,
   academyIncludes,
 } from "@/lib/academy";
+import { totalDownloadCount } from "@/lib/academy-downloads";
 
 export function AcademyEnroll() {
   const searchParams = useSearchParams();
@@ -59,7 +61,22 @@ export function AcademyEnroll() {
       id="enroll"
       className="rounded-2xl border border-navy/10 bg-white p-8 shadow-premium lg:p-10"
     >
-      <div className="text-center">
+      <div className="rounded-xl border-2 border-academy-blue/20 bg-academy-blue/5 p-5 text-center">
+        <p className="text-xs font-semibold uppercase tracking-[0.15em] text-academy-blue">
+          Building preview
+        </p>
+        <p className="mt-2 text-sm text-navy/70">
+          Test all {totalDownloadCount} downloads before you buy.
+        </p>
+        <Link
+          href="/academy/resources"
+          className="mt-4 inline-flex w-full items-center justify-center rounded-full bg-academy-blue px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-academy-blue-dark"
+        >
+          Preview Course Materials
+        </Link>
+      </div>
+
+      <div className="mt-8 text-center">
         <p className="text-xs font-semibold uppercase tracking-[0.2em] text-academy-blue">
           Launch Special
         </p>

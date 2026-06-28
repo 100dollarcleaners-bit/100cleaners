@@ -25,7 +25,11 @@ export function createAcademyAccessToken(email: string) {
 export function verifyAcademyAccessToken(token: string | undefined): string | null {
   if (!token) return null;
 
-  const [body, signature] = token.split(".");
+  const separator = token.lastIndexOf(".");
+  if (separator <= 0) return null;
+
+  const body = token.slice(0, separator);
+  const signature = token.slice(separator + 1);
   if (!body || !signature) return null;
 
   const expected = sign(body);
@@ -37,11 +41,22 @@ export function verifyAcademyAccessToken(token: string | undefined): string | nu
     return null;
   }
 
-  const [email, expStr] = body.split(":");
-  const exp = Number(expStr);
+  const colonIndex = body.lastIndexOf(":");
+  if (colonIndex <= 0) return null;
+
+  const email = body.slice(0, colonIndex);
+  const exp = Number(body.slice(colonIndex + 1));
   if (!email || !exp || Date.now() > exp) return null;
 
   return email;
+}
+
+export function normalizeAcademyEmail(input: string): string {
+  return input.trim().toLowerCase();
+}
+
+export function isValidAcademyEmail(email: string): boolean {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
 
 export async function verifyAcademyStripeSession(
@@ -79,8 +94,10 @@ export function verifyPreviewPassword(input: string): boolean {
   const expected = process.env.ACADEMY_PREVIEW_PASSWORD?.trim();
   if (!expected) return false;
 
+  const normalized = input.trim();
+
   try {
-    const a = Buffer.from(input);
+    const a = Buffer.from(normalized);
     const b = Buffer.from(expected);
     if (a.length !== b.length) return false;
     return timingSafeEqual(a, b);

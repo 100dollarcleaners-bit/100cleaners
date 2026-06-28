@@ -7,7 +7,7 @@ export function PreviewUnlockForm() {
   const [loading, setLoading] = useState(false);
 
   return (
-    <div className="mt-10 w-full max-w-sm rounded-xl border border-navy/10 bg-white p-6 text-left shadow-card">
+    <div className="mt-8 w-full max-w-sm rounded-xl border-2 border-academy-blue/20 bg-white p-6 text-left shadow-card">
       <p className="text-xs font-semibold uppercase tracking-[0.15em] text-academy-blue">
         Building Preview
       </p>

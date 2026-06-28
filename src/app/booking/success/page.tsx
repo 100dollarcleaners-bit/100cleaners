@@ -4,6 +4,9 @@ import { getStripe } from "@/lib/stripe";
 import { getBookingById } from "@/lib/supabase";
 import { getBookingServiceTotal } from "@/lib/booking-utils";
 import { TIME_SLOTS } from "@/lib/constants";
+import { bookingSuccessMetadata } from "@/lib/site-metadata";
+
+export const metadata = bookingSuccessMetadata;
 
 interface Props {
   searchParams: { session_id?: string };

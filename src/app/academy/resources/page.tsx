@@ -7,20 +7,17 @@ import { BrandLogo } from "@/components/ui/BrandLogo";
 import { Button } from "@/components/ui/Button";
 import {
   COOKIE_NAME,
-  isPreviewAccessEnabled,
   verifyAcademyAccessToken,
 } from "@/lib/academy-access";
 import {
   academyDownloadSections,
   totalDownloadCount,
 } from "@/lib/academy-downloads";
-import { ACADEMY_COURSE_NAME, ACADEMY_LAUNCH_PRICE } from "@/lib/academy";
+import { ACADEMY_LAUNCH_PRICE } from "@/lib/academy";
+import { academyResourcesMetadata } from "@/lib/site-metadata";
 import { BRAND_NAME } from "@/lib/constants";
 
-export const metadata = {
-  title: `Course Materials | ${ACADEMY_COURSE_NAME}`,
-  description: `Download all ${totalDownloadCount} templates, SOPs, checklists, and spreadsheets.`,
-};
+export const metadata = academyResourcesMetadata;
 
 interface Props {
   searchParams: {
@@ -34,6 +31,8 @@ const errorMessages: Record<string, string> = {
   unlock_failed: "We could not verify your payment. Wait a minute and try the link from your confirmation email again.",
   invalid_email: "Please enter a valid email address.",
   invalid_preview_password: "Incorrect preview password. Try again.",
+  preview_not_configured:
+    "Preview access is not set up yet. Contact support or enroll below.",
 };
 
 export default function AcademyResourcesPage({ searchParams }: Props) {
@@ -43,7 +42,6 @@ export default function AcademyResourcesPage({ searchParams }: Props) {
     ? errorMessages[searchParams.error] ?? "Something went wrong. Please try again."
     : null;
   const justUnlocked = searchParams.unlocked === "1";
-  const previewEnabled = isPreviewAccessEnabled();
 
   if (!studentEmail) {
     return (
@@ -59,25 +57,33 @@ export default function AcademyResourcesPage({ searchParams }: Props) {
           </div>
         </header>
 
-        <main className="mx-auto flex max-w-md flex-1 flex-col items-center justify-center px-6 py-16 text-center">
+        <main className="mx-auto flex max-w-lg flex-1 flex-col items-center justify-center px-6 py-16 text-center">
           <div className="flex h-20 w-20 items-center justify-center rounded-full bg-navy/10">
             <Lock size={36} className="text-navy" />
           </div>
-          <h1 className="mt-8 font-display text-3xl text-navy">Enrolled Students Only</h1>
+          <h1 className="mt-8 font-display text-3xl text-navy">Course Materials</h1>
           <p className="mt-4 text-navy/60">
-            Course materials unlock after payment. On the confirmation page, click
-            <strong className="text-navy"> Download Course Materials</strong> — that
-            link is personal to your purchase.
+            Preview downloads while we finish the course, or enroll for full lifetime
+            access after payment.
           </p>
           {errorMsg && (
-            <p className="mt-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">
+            <p className="mt-4 w-full max-w-sm rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">
               {errorMsg}
             </p>
           )}
-          <Button href="/academy#enroll" className="mt-8">
+          <PreviewUnlockForm />
+          <div className="mt-10 flex w-full max-w-sm items-center gap-3 text-xs uppercase tracking-wider text-navy/40">
+            <span className="h-px flex-1 bg-navy/10" />
+            or enroll
+            <span className="h-px flex-1 bg-navy/10" />
+          </div>
+          <Button href="/academy#enroll" variant="secondary" className="mt-6">
             Enroll — ${ACADEMY_LAUNCH_PRICE}
           </Button>
-          {previewEnabled && <PreviewUnlockForm />}
+          <p className="mt-4 max-w-sm text-xs text-navy/45">
+            Paid students: use the <strong className="text-navy">Download Course Materials</strong>{" "}
+            button on your confirmation page after checkout.
+          </p>
         </main>
       </div>
     );

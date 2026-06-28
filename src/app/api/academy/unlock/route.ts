@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { getAppUrl } from "@/lib/app-url";
 import {
   COOKIE_NAME,
   TOKEN_TTL_MS,
@@ -11,7 +12,7 @@ export async function GET(request: NextRequest) {
 
   if (!sessionId) {
     return NextResponse.redirect(
-      new URL("/academy/resources?error=missing_session", request.url)
+      new URL("/academy/resources?error=missing_session", getAppUrl())
     );
   }
 
@@ -19,13 +20,13 @@ export async function GET(request: NextRequest) {
 
   if (!enrollment) {
     return NextResponse.redirect(
-      new URL("/academy/resources?error=unlock_failed", request.url)
+      new URL("/academy/resources?error=unlock_failed", getAppUrl())
     );
   }
 
   const token = createAcademyAccessToken(enrollment.email);
   const response = NextResponse.redirect(
-    new URL("/academy/resources?unlocked=1", request.url)
+    new URL("/academy/resources?unlocked=1", getAppUrl())
   );
 
   response.cookies.set(COOKIE_NAME, token, {
