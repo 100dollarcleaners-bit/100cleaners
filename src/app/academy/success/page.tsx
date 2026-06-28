@@ -82,7 +82,7 @@ export default async function AcademySuccessPage({ searchParams }: Props) {
         <Link
           href={
             sessionId
-              ? `/academy/resources?session_id=${sessionId}`
+              ? `/api/academy/unlock?session_id=${sessionId}`
               : "/academy/resources"
           }
           className="mt-6 inline-flex rounded-full bg-academy-green px-8 py-3.5 text-sm font-semibold text-white transition-colors hover:bg-academy-green-dark"

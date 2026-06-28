@@ -1,11 +1,13 @@
-import { createReadStream, existsSync } from "fs";
+import { existsSync, readFileSync } from "fs";
 import path from "path";
 import { NextRequest, NextResponse } from "next/server";
-import { Readable } from "stream";
 import {
   COOKIE_NAME,
   verifyAcademyAccessToken,
 } from "@/lib/academy-access";
+
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
 
 const CONTENT_ROOT = path.join(process.cwd(), "content/academy");
 
@@ -25,23 +27,13 @@ function resolveFile(safePath: string): string | null {
   return full;
 }
 
-function nodeStreamToWeb(stream: Readable) {
-  return new ReadableStream({
-    start(controller) {
-      stream.on("data", (chunk) => controller.enqueue(chunk));
-      stream.on("end", () => controller.close());
-      stream.on("error", (err) => controller.error(err));
-    },
-  });
-}
-
 export async function GET(request: NextRequest) {
   const token = request.cookies.get(COOKIE_NAME)?.value;
   const email = verifyAcademyAccessToken(token);
 
   if (!email) {
     return NextResponse.json(
-      { error: "Access denied. Please enroll to download course materials." },
+      { error: "Access denied. Please enroll and unlock your materials first." },
       { status: 403 }
     );
   }
@@ -56,19 +48,24 @@ export async function GET(request: NextRequest) {
   const resolved = resolveFile(path.join(subdir, fileParam));
 
   if (!resolved) {
-    return NextResponse.json({ error: "File not found" }, { status: 404 });
+    console.error("Academy file missing on server:", fileParam);
+    return NextResponse.json(
+      { error: "File not found on server. Contact support." },
+      { status: 404 }
+    );
   }
 
   const filename = path.basename(resolved);
   const contentType =
     ext === ".pdf" ? "application/pdf" : "text/csv; charset=utf-8";
 
-  const stream = createReadStream(resolved);
+  const buffer = readFileSync(resolved);
 
-  return new NextResponse(nodeStreamToWeb(stream), {
+  return new NextResponse(buffer, {
     headers: {
       "Content-Type": contentType,
       "Content-Disposition": `attachment; filename="${filename}"`,
+      "Content-Length": String(buffer.length),
       "Cache-Control": "private, no-cache",
     },
   });

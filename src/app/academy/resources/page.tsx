@@ -1,15 +1,12 @@
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
 import Link from "next/link";
-import { Download, FileSpreadsheet, FileText, Lock } from "lucide-react";
+import { Lock } from "lucide-react";
+import { DownloadList } from "@/components/academy/DownloadList";
 import { BrandLogo } from "@/components/ui/BrandLogo";
 import { Button } from "@/components/ui/Button";
 import {
   COOKIE_NAME,
-  TOKEN_TTL_MS,
-  createAcademyAccessToken,
   verifyAcademyAccessToken,
-  verifyAcademyStripeSession,
 } from "@/lib/academy-access";
 import {
   academyDownloadSections,
@@ -23,46 +20,25 @@ export const metadata = {
   description: `Download all ${totalDownloadCount} templates, SOPs, checklists, and spreadsheets.`,
 };
 
-const typeIcons = {
-  guide: FileText,
-  checklist: FileText,
-  template: FileText,
-  spreadsheet: FileSpreadsheet,
-  contract: FileText,
-};
-
-const typeLabels = {
-  guide: "PDF Guide",
-  checklist: "PDF Checklist",
-  template: "PDF Template",
-  spreadsheet: "Spreadsheet",
-  contract: "PDF Contract",
-};
-
 interface Props {
-  searchParams: { session_id?: string };
+  searchParams: {
+    error?: string;
+    unlocked?: string;
+  };
 }
 
-export default async function AcademyResourcesPage({ searchParams }: Props) {
-  const sessionId = searchParams.session_id;
+const errorMessages: Record<string, string> = {
+  missing_session: "Invalid unlock link. Use the button on your confirmation page after payment.",
+  unlock_failed: "We could not verify your payment. Wait a minute and try the link from your confirmation email again.",
+};
 
-  if (sessionId) {
-    const enrollment = await verifyAcademyStripeSession(sessionId);
-    if (enrollment) {
-      const token = createAcademyAccessToken(enrollment.email);
-      cookies().set(COOKIE_NAME, token, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "lax",
-        maxAge: TOKEN_TTL_MS / 1000,
-        path: "/",
-      });
-      redirect("/academy/resources");
-    }
-  }
-
+export default function AcademyResourcesPage({ searchParams }: Props) {
   const accessToken = cookies().get(COOKIE_NAME)?.value;
   const studentEmail = verifyAcademyAccessToken(accessToken);
+  const errorMsg = searchParams.error
+    ? errorMessages[searchParams.error] ?? "Something went wrong. Please try again."
+    : null;
+  const justUnlocked = searchParams.unlocked === "1";
 
   if (!studentEmail) {
     return (
@@ -84,10 +60,15 @@ export default async function AcademyResourcesPage({ searchParams }: Props) {
           </div>
           <h1 className="mt-8 font-display text-3xl text-navy">Enrolled Students Only</h1>
           <p className="mt-4 text-navy/60">
-            Course materials are available to students who have completed enrollment.
-            After payment, use the link in your confirmation email or return from the
-            success page to unlock downloads.
+            Course materials unlock after payment. On the confirmation page, click
+            <strong className="text-navy"> Download Course Materials</strong> — that
+            link is personal to your purchase.
           </p>
+          {errorMsg && (
+            <p className="mt-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">
+              {errorMsg}
+            </p>
+          )}
           <Button href="/academy#enroll" className="mt-8">
             Enroll — ${ACADEMY_LAUNCH_PRICE}
           </Button>
@@ -118,12 +99,18 @@ export default async function AcademyResourcesPage({ searchParams }: Props) {
             Course Download Pack
           </h1>
           <p className="mx-auto mt-4 max-w-2xl text-navy/60">
-            {totalDownloadCount} professional PDFs, templates, and spreadsheets.
-            Click any item to download — files open as PDFs ready to print or save.
+            Click <strong>View PDF</strong> to open in a new tab, or{" "}
+            <strong>Download</strong> to save to your device. All files are
+            professional PDFs — not editable source files.
           </p>
           <p className="mt-2 text-xs text-navy/40">
-            Access granted for {studentEmail}
+            Unlocked for {studentEmail}
           </p>
+          {justUnlocked && (
+            <p className="mt-4 rounded-lg border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-800">
+              Access unlocked! Your downloads are ready below.
+            </p>
+          )}
         </div>
 
         <div className="mt-12 rounded-xl border border-amber-200 bg-amber-50 px-5 py-4 text-sm text-amber-900">
@@ -136,31 +123,9 @@ export default async function AcademyResourcesPage({ searchParams }: Props) {
           {academyDownloadSections.map((section) => (
             <section key={section.module}>
               <h2 className="font-display text-xl text-navy">{section.module}</h2>
-              <ul className="mt-4 divide-y divide-navy/10 rounded-xl border border-navy/10 bg-white">
-                {section.items.map((item) => {
-                  const Icon = typeIcons[item.type];
-                  const downloadUrl = `/api/academy/download?file=${encodeURIComponent(item.fileKey)}`;
-                  return (
-                    <li key={item.fileKey}>
-                      <a
-                        href={downloadUrl}
-                        className="flex items-center justify-between gap-4 px-5 py-4 transition-colors hover:bg-cream/50"
-                      >
-                        <div className="flex items-center gap-3">
-                          <Icon size={18} className="shrink-0 text-academy-blue" />
-                          <span className="text-sm font-medium text-navy">
-                            {item.title}
-                          </span>
-                        </div>
-                        <span className="flex shrink-0 items-center gap-1.5 rounded-full bg-academy-blue/10 px-3 py-1 text-xs font-medium text-academy-blue">
-                          <Download size={12} />
-                          {typeLabels[item.type]}
-                        </span>
-                      </a>
-                    </li>
-                  );
-                })}
-              </ul>
+              <div className="mt-4">
+                <DownloadList section={section.module} items={section.items} />
+              </div>
             </section>
           ))}
         </div>

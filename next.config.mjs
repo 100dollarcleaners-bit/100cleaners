@@ -9,6 +9,11 @@ const nextConfig = {
       },
     ],
   },
+  experimental: {
+    outputFileTracingIncludes: {
+      "/api/academy/download": ["./content/academy/**/*"],
+    },
+  },
 };
 
 export default nextConfig;

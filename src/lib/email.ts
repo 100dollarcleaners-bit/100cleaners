@@ -85,8 +85,8 @@ export async function sendAcademyEnrollmentEmails(params: {
     <p>Thank you for enrolling. Your payment has been received and you now have lifetime access to the full course.</p>
     <p style="margin:24px 0;">
       <strong>Download your materials:</strong><br/>
-      <a href="${appUrl}/academy/resources?session_id=${params.sessionId ?? ""}" style="color:#1e6fd9;">Access your course download pack</a><br/>
-      <span style="color:#666;font-size:14px;">${params.sessionId ? "Use this personal link to unlock all PDFs and templates." : "Check your confirmation page for your download link."}</span>
+      <a href="${appUrl}/api/academy/unlock?session_id=${params.sessionId ?? ""}" style="color:#1e6fd9;">Unlock your course download pack</a><br/>
+      <span style="color:#666;font-size:14px;">Opens your personal PDF library — SOPs, checklists, templates & spreadsheets.</span>
     </p>
     <p style="margin:24px 0;">
       <strong>Video lessons:</strong> You'll receive login details for the video modules within 24 hours.
