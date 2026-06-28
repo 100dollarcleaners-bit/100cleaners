@@ -237,12 +237,6 @@ export default function AcademyPage() {
                     </span>
                   ))}
                 </div>
-                <Link
-                  href="/academy/resources"
-                  className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-academy-blue hover:underline"
-                >
-                  Preview full download list →
-                </Link>
               </div>
 
               {/* Ecosystem */}

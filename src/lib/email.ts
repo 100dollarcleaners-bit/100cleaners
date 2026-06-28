@@ -71,6 +71,7 @@ export async function sendBookingConfirmationEmails(booking: BookingRecord) {
 export async function sendAcademyEnrollmentEmails(params: {
   customerName: string;
   customerEmail: string;
+  sessionId?: string;
 }) {
   const resend = getResend();
   const from = process.env.RESEND_FROM_EMAIL ?? "bookings@100cleaner.com";
@@ -83,9 +84,9 @@ export async function sendAcademyEnrollmentEmails(params: {
     <p>Hi ${params.customerName},</p>
     <p>Thank you for enrolling. Your payment has been received and you now have lifetime access to the full course.</p>
     <p style="margin:24px 0;">
-      <strong>Download your materials now:</strong><br/>
-      <a href="${appUrl}/academy/resources" style="color:#1e6fd9;">${appUrl}/academy/resources</a><br/>
-      <span style="color:#666;font-size:14px;">51 templates, SOPs, checklists, scripts & spreadsheets — ready to customize.</span>
+      <strong>Download your materials:</strong><br/>
+      <a href="${appUrl}/academy/resources?session_id=${params.sessionId ?? ""}" style="color:#1e6fd9;">Access your course download pack</a><br/>
+      <span style="color:#666;font-size:14px;">${params.sessionId ? "Use this personal link to unlock all PDFs and templates." : "Check your confirmation page for your download link."}</span>
     </p>
     <p style="margin:24px 0;">
       <strong>Video lessons:</strong> You'll receive login details for the video modules within 24 hours.

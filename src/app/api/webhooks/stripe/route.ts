@@ -47,6 +47,7 @@ export async function POST(request: NextRequest) {
               await sendAcademyEnrollmentEmails({
                 customerName,
                 customerEmail,
+                sessionId: session.id,
               });
             } catch (emailErr) {
               console.error("Academy email send failed:", emailErr);
