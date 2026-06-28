@@ -1,0 +1,16 @@
+Service Type,Base Price,Bedrooms,Bathroom Count,Extra Bedrooms (each),Extra Baths (each),Sq Ft Over 2500,Laundry Add-on,Dishes Add-on,Inside Oven,Inside Fridge,Interior Windows,Baseboards,Ceiling Fans (each),Pet Surcharge,Total Quote
+Regular Clean,150,3,2,30,20,75,50,25,40,35,50,50,10,35,=SUM(B2+IF(C2>3,(C2-3)*E2,0)+IF(D2>2,(D2-2)*F2,0)+IF(G2>0,G2,0)+IF(H2>0,H2,0)+IF(I2>0,I2,0)+IF(J2>0,J2,0)+IF(K2>0,K2,0)+IF(L2>0,L2,0)+IF(M2>0,M2,0)+IF(N2>0,N2*O2,0)+IF(P2>0,P2,0))
+Deep Clean,300,3,2,40,25,100,50,25,40,35,50,50,10,50,
+Move-Out Clean,400,3,2,50,30,125,50,25,40,35,75,75,10,50,
+Airbnb Turnover,150,2,1,25,15,50,50,25,40,35,0,0,10,25,
+
+Instructions:
+1. Open in Google Sheets or Excel
+2. Duplicate the example row for each new quote
+3. Enter 1 in add-on columns to include that add-on (or enter the dollar amount)
+4. Adjust base prices in row 2 for your market
+5. Add a Cleaner Pay column: Regular = 67% of total | Deep = 67% of total
+6. Profit = Total Quote - Cleaner Pay - Supply Cost (estimate $8-15/job)
+
+Sample Regular Clean (3 bed / 2 bath + laundry):
+Base 150 + Laundry 50 = $200 quoted | Cleaner $130 | Supplies $10 | Profit $60

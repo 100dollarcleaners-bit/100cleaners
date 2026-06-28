@@ -72,15 +72,23 @@ export default async function AcademySuccessPage({ searchParams }: Props) {
         <div className="mt-8 rounded-xl bg-white p-6 text-left text-sm text-navy/70 shadow-card">
           <p className="font-medium text-navy">What happens next:</p>
           <ul className="mt-3 space-y-2">
+            <li>✔ Download all course materials now</li>
             <li>✔ Check your email for your receipt</li>
-            <li>✔ Course access details arrive within 24 hours</li>
+            <li>✔ Video lesson access arrives within 24 hours</li>
             <li>✔ Lifetime access + all future updates included</li>
           </ul>
         </div>
 
         <Link
+          href="/academy/resources"
+          className="mt-6 inline-flex rounded-full bg-academy-green px-8 py-3.5 text-sm font-semibold text-white transition-colors hover:bg-academy-green-dark"
+        >
+          Download Course Materials
+        </Link>
+
+        <Link
           href="/academy"
-          className="mt-10 inline-flex rounded-full bg-navy px-8 py-3.5 text-sm font-semibold text-white transition-colors hover:bg-navy-light"
+          className="mt-4 block text-sm text-navy/50 hover:text-gold"
         >
           Back to Academy
         </Link>

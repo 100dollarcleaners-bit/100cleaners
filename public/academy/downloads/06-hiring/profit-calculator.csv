@@ -1,0 +1,20 @@
+Job Type,Customer Pays,Cleaner Pay,Supply Cost,Company Profit,Margin %
+Regular Clean (3 bed / 2 bath),150,100,10,40,26.7%
+Deep Clean (3 bed / 2 bath),300,200,20,80,26.7%
+Move-Out Clean,,,,
+Airbnb Turnover,,,,
+Regular + Laundry Add-on,,,,
+Deep + Inside Oven Add-on,,,,
+Regular + Pet Surcharge,,,,
+
+Instructions:
+1. Open in Google Sheets or Excel
+2. Company Profit = Customer Pays - Cleaner Pay - Supply Cost
+3. Margin % = Company Profit / Customer Pays (format column as percentage)
+4. Target margin: 25-35% after supplies for sustainable growth
+5. Sample rows use the 100% Cleaner model: Regular $150/$100/$10 | Deep $300/$200/$20
+6. Duplicate blank rows for each job type you offer
+
+Sample formulas (row 2):
+Profit: =B2-C2-D2
+Margin: =E2/B2

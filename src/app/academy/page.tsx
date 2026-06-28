@@ -21,6 +21,7 @@ import {
   academyEcosystem,
   academyProfitExample,
 } from "@/lib/academy";
+import { totalDownloadCount } from "@/lib/academy-downloads";
 import { BRAND_NAME } from "@/lib/constants";
 
 export const metadata = {
@@ -220,11 +221,11 @@ export default function AcademyPage() {
               {/* Downloads */}
               <div className="mt-16">
                 <h3 className="font-display text-2xl text-navy">
-                  40+ Included Downloads
+                  {totalDownloadCount} Included Downloads
                 </h3>
                 <p className="mt-3 text-sm text-navy/60">
-                  Templates, checklists, and calculators that dramatically increase
-                  the value of your investment.
+                  Templates, checklists, and calculators included with enrollment —
+                  customize and use immediately.
                 </p>
                 <div className="mt-6 flex flex-wrap gap-2">
                   {academyDownloads.map((item) => (
@@ -236,6 +237,12 @@ export default function AcademyPage() {
                     </span>
                   ))}
                 </div>
+                <Link
+                  href="/academy/resources"
+                  className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-academy-blue hover:underline"
+                >
+                  Preview full download list →
+                </Link>
               </div>
 
               {/* Ecosystem */}

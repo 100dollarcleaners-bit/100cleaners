@@ -83,8 +83,13 @@ export async function sendAcademyEnrollmentEmails(params: {
     <p>Hi ${params.customerName},</p>
     <p>Thank you for enrolling. Your payment has been received and you now have lifetime access to the full course.</p>
     <p style="margin:24px 0;">
-      <strong>What's next:</strong> You'll receive login details and course access instructions within 24 hours. 
-      In the meantime, save this email as your receipt.
+      <strong>Download your materials now:</strong><br/>
+      <a href="${appUrl}/academy/resources" style="color:#1e6fd9;">${appUrl}/academy/resources</a><br/>
+      <span style="color:#666;font-size:14px;">51 templates, SOPs, checklists, scripts & spreadsheets — ready to customize.</span>
+    </p>
+    <p style="margin:24px 0;">
+      <strong>Video lessons:</strong> You'll receive login details for the video modules within 24 hours.
+      Save this email as your receipt.
     </p>
     <p style="color:#666;font-size:14px;">Questions? Reply to this email or visit ${appUrl}/academy</p>
   `;

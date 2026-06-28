@@ -1,0 +1,34 @@
+Product,Starting Qty,Used This Week,Reorder Qty,Reorder? (Y/N)
+All-Purpose Cleaner (32 oz),4,2,6,N
+Bathroom / Disinfectant Cleaner (32 oz),4,3,6,Y
+Glass Cleaner (32 oz),3,1,4,N
+Degreaser / Kitchen Cleaner (32 oz),2,1,3,N
+Microfiber Cloths (pack of 12),3,1,4,N
+Scrub Sponges (pack of 6),2,1,3,Y
+Toilet Bowl Cleaner,3,2,4,Y
+Trash Bags (kitchen, box of 50),2,1,2,N
+Trash Bags (bathroom, box of 50),1,1,2,Y
+Paper Towels (6-pack),2,2,3,Y
+Disposable Gloves (box),3,1,3,N
+Magic Erasers (pack of 6),2,0,2,N
+Stainless Steel Polish,1,0,2,N
+Floor Cleaner / Mop Solution,2,1,3,N
+Vacuum Bags / Filters,2,0,2,N
+Mop Heads (replaceable),3,1,4,Y
+Scrub Brushes (assorted),2,0,2,N
+Caddy / Tote (equipment),1,0,1,N
+Extension Duster Refills,1,0,2,N
+Pumice Stone / Hard Water Tools,2,0,2,N
+
+Instructions:
+1. Open in Google Sheets or Excel
+2. Complete every Friday before placing supply orders
+3. Ending Qty = Starting Qty - Used This Week (add column if helpful)
+4. Set Reorder? to Y when Ending Qty is at or below your par level
+5. Adjust Reorder Qty for bulk discounts from your supplier
+6. Duplicate rows for products specific to your operation
+
+Par level guide:
+- Sprays: reorder when 2 or fewer full bottles remain
+- Microfiber: reorder when fewer than 2 clean packs available
+- Paper goods: reorder when 1 pack/box remains
