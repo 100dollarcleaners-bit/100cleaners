@@ -71,4 +71,22 @@ export async function verifyAcademyStripeSession(
   }
 }
 
+export function isPreviewAccessEnabled(): boolean {
+  return Boolean(process.env.ACADEMY_PREVIEW_PASSWORD?.trim());
+}
+
+export function verifyPreviewPassword(input: string): boolean {
+  const expected = process.env.ACADEMY_PREVIEW_PASSWORD?.trim();
+  if (!expected) return false;
+
+  try {
+    const a = Buffer.from(input);
+    const b = Buffer.from(expected);
+    if (a.length !== b.length) return false;
+    return timingSafeEqual(a, b);
+  } catch {
+    return false;
+  }
+}
+
 export { COOKIE_NAME, TOKEN_TTL_MS };

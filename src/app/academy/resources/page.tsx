@@ -2,10 +2,12 @@ import { cookies } from "next/headers";
 import Link from "next/link";
 import { Lock } from "lucide-react";
 import { DownloadList } from "@/components/academy/DownloadList";
+import { PreviewUnlockForm } from "@/components/academy/PreviewUnlockForm";
 import { BrandLogo } from "@/components/ui/BrandLogo";
 import { Button } from "@/components/ui/Button";
 import {
   COOKIE_NAME,
+  isPreviewAccessEnabled,
   verifyAcademyAccessToken,
 } from "@/lib/academy-access";
 import {
@@ -30,6 +32,8 @@ interface Props {
 const errorMessages: Record<string, string> = {
   missing_session: "Invalid unlock link. Use the button on your confirmation page after payment.",
   unlock_failed: "We could not verify your payment. Wait a minute and try the link from your confirmation email again.",
+  invalid_email: "Please enter a valid email address.",
+  invalid_preview_password: "Incorrect preview password. Try again.",
 };
 
 export default function AcademyResourcesPage({ searchParams }: Props) {
@@ -39,6 +43,7 @@ export default function AcademyResourcesPage({ searchParams }: Props) {
     ? errorMessages[searchParams.error] ?? "Something went wrong. Please try again."
     : null;
   const justUnlocked = searchParams.unlocked === "1";
+  const previewEnabled = isPreviewAccessEnabled();
 
   if (!studentEmail) {
     return (
@@ -72,6 +77,7 @@ export default function AcademyResourcesPage({ searchParams }: Props) {
           <Button href="/academy#enroll" className="mt-8">
             Enroll — ${ACADEMY_LAUNCH_PRICE}
           </Button>
+          {previewEnabled && <PreviewUnlockForm />}
         </main>
       </div>
     );
