@@ -115,9 +115,6 @@ export default function AcademyResourcesPage({ searchParams }: Props) {
             <strong>Download</strong> to save to your device. All files are
             professional PDFs — not editable source files.
           </p>
-          <p className="mt-2 text-xs text-navy/40">
-            Unlocked for {studentEmail}
-          </p>
           {justUnlocked && (
             <p className="mt-4 rounded-lg border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-800">
               Access unlocked! Your downloads are ready below.
