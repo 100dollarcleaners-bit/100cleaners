@@ -1,4 +1,5 @@
 import { createHmac, timingSafeEqual } from "crypto";
+import { NextResponse } from "next/server";
 import { getStripe } from "./stripe";
 
 const COOKIE_NAME = "academy_access";
@@ -25,11 +26,20 @@ export function createAcademyAccessToken(email: string) {
 export function verifyAcademyAccessToken(token: string | undefined): string | null {
   if (!token) return null;
 
-  const separator = token.lastIndexOf(".");
+  let normalized = token;
+  if (token.includes("%")) {
+    try {
+      normalized = decodeURIComponent(token);
+    } catch {
+      normalized = token;
+    }
+  }
+
+  const separator = normalized.lastIndexOf(".");
   if (separator <= 0) return null;
 
-  const body = token.slice(0, separator);
-  const signature = token.slice(separator + 1);
+  const body = normalized.slice(0, separator);
+  const signature = normalized.slice(separator + 1);
   if (!body || !signature) return null;
 
   const expected = sign(body);
@@ -107,3 +117,22 @@ export function verifyPreviewPassword(input: string): boolean {
 }
 
 export { COOKIE_NAME, TOKEN_TTL_MS };
+
+export function getAcademyAccessCookieOptions() {
+  return {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax" as const,
+    maxAge: TOKEN_TTL_MS / 1000,
+    path: "/",
+    ...(process.env.NODE_ENV === "production"
+      ? { domain: ".100cleaner.com" as const }
+      : {}),
+  };
+}
+
+export function setAcademyAccessCookie(response: NextResponse, email: string) {
+  const token = createAcademyAccessToken(email);
+  response.cookies.set(COOKIE_NAME, token, getAcademyAccessCookieOptions());
+  return token;
+}

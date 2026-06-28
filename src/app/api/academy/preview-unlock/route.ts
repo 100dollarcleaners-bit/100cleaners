@@ -1,50 +1,85 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getAppUrl } from "@/lib/app-url";
 import {
-  COOKIE_NAME,
-  TOKEN_TTL_MS,
   createAcademyAccessToken,
   isPreviewAccessEnabled,
   isValidAcademyEmail,
   normalizeAcademyEmail,
+  setAcademyAccessCookie,
   verifyPreviewPassword,
 } from "@/lib/academy-access";
 
+function resourcesUrl(request: NextRequest, query = "") {
+  return new URL(`/academy/resources${query}`, request.url);
+}
+
 export async function POST(request: NextRequest) {
-  const body = await request.formData();
-  const email = normalizeAcademyEmail(String(body.get("email") ?? ""));
-  const password = String(body.get("password") ?? "");
+  const contentType = request.headers.get("content-type") ?? "";
+  let email = "";
+  let password = "";
+
+  if (contentType.includes("application/json")) {
+    const body = await request.json();
+    email = normalizeAcademyEmail(String(body.email ?? ""));
+    password = String(body.password ?? "");
+  } else {
+    const body = await request.formData();
+    email = normalizeAcademyEmail(String(body.get("email") ?? ""));
+    password = String(body.get("password") ?? "");
+  }
+
+  const wantsJson = contentType.includes("application/json");
 
   if (!isValidAcademyEmail(email)) {
+    if (wantsJson) {
+      return NextResponse.json(
+        { error: "invalid_email", message: "Please enter a valid email address." },
+        { status: 400 }
+      );
+    }
     return NextResponse.redirect(
-      new URL("/academy/resources?error=invalid_email", getAppUrl())
+      resourcesUrl(request, "?error=invalid_email")
     );
   }
 
   if (!isPreviewAccessEnabled()) {
+    if (wantsJson) {
+      return NextResponse.json(
+        {
+          error: "preview_not_configured",
+          message: "Preview access is not set up yet. Contact support or enroll below.",
+        },
+        { status: 503 }
+      );
+    }
     return NextResponse.redirect(
-      new URL("/academy/resources?error=preview_not_configured", getAppUrl())
+      resourcesUrl(request, "?error=preview_not_configured")
     );
   }
 
   if (!verifyPreviewPassword(password)) {
+    if (wantsJson) {
+      return NextResponse.json(
+        {
+          error: "invalid_preview_password",
+          message: "Incorrect preview password. Try again.",
+        },
+        { status: 401 }
+      );
+    }
     return NextResponse.redirect(
-      new URL("/academy/resources?error=invalid_preview_password", getAppUrl())
+      resourcesUrl(request, "?error=invalid_preview_password")
     );
   }
 
-  const token = createAcademyAccessToken(email);
+  if (wantsJson) {
+    const response = NextResponse.json({ ok: true, email });
+    setAcademyAccessCookie(response, email);
+    return response;
+  }
+
   const response = NextResponse.redirect(
-    new URL("/academy/resources?unlocked=1", getAppUrl())
+    resourcesUrl(request, "?unlocked=1")
   );
-
-  response.cookies.set(COOKIE_NAME, token, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
-    maxAge: TOKEN_TTL_MS / 1000,
-    path: "/",
-  });
-
+  setAcademyAccessCookie(response, email);
   return response;
 }

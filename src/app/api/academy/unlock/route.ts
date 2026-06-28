@@ -1,18 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getAppUrl } from "@/lib/app-url";
 import {
-  COOKIE_NAME,
-  TOKEN_TTL_MS,
-  createAcademyAccessToken,
+  setAcademyAccessCookie,
   verifyAcademyStripeSession,
 } from "@/lib/academy-access";
+
+function resourcesUrl(request: NextRequest, query = "") {
+  return new URL(`/academy/resources${query}`, request.url);
+}
 
 export async function GET(request: NextRequest) {
   const sessionId = request.nextUrl.searchParams.get("session_id");
 
   if (!sessionId) {
     return NextResponse.redirect(
-      new URL("/academy/resources?error=missing_session", getAppUrl())
+      resourcesUrl(request, "?error=missing_session")
     );
   }
 
@@ -20,22 +21,13 @@ export async function GET(request: NextRequest) {
 
   if (!enrollment) {
     return NextResponse.redirect(
-      new URL("/academy/resources?error=unlock_failed", getAppUrl())
+      resourcesUrl(request, "?error=unlock_failed")
     );
   }
 
-  const token = createAcademyAccessToken(enrollment.email);
   const response = NextResponse.redirect(
-    new URL("/academy/resources?unlocked=1", getAppUrl())
+    resourcesUrl(request, "?unlocked=1")
   );
-
-  response.cookies.set(COOKIE_NAME, token, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
-    maxAge: TOKEN_TTL_MS / 1000,
-    path: "/",
-  });
-
+  setAcademyAccessCookie(response, enrollment.email);
   return response;
 }
